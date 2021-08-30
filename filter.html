@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List</title>
+    <script src="https://kit.fontawesome.com/3f04a3eb9b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./filter.css">
+</head>
+
+<body>
+    <div id="container">
+        <div id="left">
+            <h1>Filter</h1>
+            <div id="filter">
+                <h3>Search By NAME/PIN/UDISE Code:</h3>
+                <input type="text" id="name" placeholder="NAME or PIN or UDISE Code">
+                <div>
+                    <h3>School-Type:</h3>
+                    <div id="filter-div">
+                        <input type="checkbox" name="govt" id="govt">
+                        <label for="govt" id="govtLable" class="filter-item">Boys Only</label>
+                        <input type="checkbox" name="private" id="private">
+                        <label for="private" id="privateLable" class="filter-item">Girls Only</label>
+                        <input type="checkbox" name="pulic" id="pulic">
+                        <label for="pulic" id="pulicLable" class="filter-item">Co-Ed</label>
+                    </div>
+                </div>
+                <label for="CSWN" style="cursor: pointer;">
+                    <h3>Special School for CSWN</h3>
+                </label>
+                <input type="checkbox" id="CSWN">
+                <h3>Year Of Establishment:</h3> <span id="rangevalue">1950-2022</span>
+                <input type="range" id="yearRange">
+                <h3>Location:</h3>
+                <select name="locations" id="locations">
+                    <option value="none" selected>Choose city...</option>
+                </select>
+            </div>
+        </div>
+        <div id="right">
+            <h1>Schools List <i id="login" class="fas fa-user-lock"></i></h1>
+            <ul id="list">
+            </ul>
+            <h2 id="notfound" style="display: none;">
+                No School Found Try Other Filters
+            </h2>
+            <script>
+                document.getElementById('left').addEventListener('click',()=>{
+                    if(document.getElementById('list').innerHTML==''){
+                        document.getElementById('list').style.display = 'none'
+                        document.getElementById('notfound').style.display='block'
+                    } else{
+                        document.getElementById('list').style.display = 'block'
+                    }
+                })
+            </script>
+        </div>
+    </div>
+    <style>
+        #login {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 1rem;
+            font-size: large;
+            cursor: pointer;
+            background-color: rgb(0, 23, 156);
+            color: rgb(236, 251, 255);
+        }
+
+        #loginform {
+            top: 20%;
+            left: 40%;
+            border-radius: 20px;
+            background-color: rgb(236, 251, 255);
+            background-color: rgb(255, 233, 250);
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            animation: appear 1s ease-in-out forwards;
+        }
+
+        #loginform input,
+        #loginform button {
+            min-width: 80%;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(200px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0);
+            }
+        }
+
+        #box {
+            display: none;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            z-index: 99;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.418);
+        }
+
+        #loginform h1 {
+            padding: 1rem;
+            width: 100%;
+            text-align: center;
+            background-color: rgb(0, 23, 156);
+            color: rgb(236, 251, 255);
+        }
+
+        #loginform i,
+        #loginform input,
+        button {
+            margin: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 20px;
+        }
+    </style>
+    <div id="box">
+        <form id="loginform" action="login" method="post">
+            <h1>Login</h1>
+            <input type="email" name="username" placeholder="name">
+            <input type="password" name="password" placeholder="password">
+            <button type="submit">Submit</button>
+            <i><b>don't have an account?</b> <a href="./register.html"> create an account</a></i>
+        </form>
+        <script>
+            document.getElementById('login').addEventListener('click', () => {
+                form.style.display = 'flex'
+                box.style.display = 'flex'
+            })
+            var form = document.getElementById('loginform');
+            var box = document.getElementById('box')
+            box.addEventListener('click', function (event) {
+                var isClickInsideElement = form.contains(event.target);
+                if (!isClickInsideElement) {
+                    if (form.style.display == 'flex') {
+                        form.style.display = 'none'
+                        box.style.display = 'none'
+                    }
+                }
+            });
+        </script>
+    </div>
+</body>
+<script src="./filter.js"></script>
+
+</html>

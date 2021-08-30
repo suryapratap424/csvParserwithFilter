@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map</title>
+    <script src="https://kit.fontawesome.com/3f04a3eb9b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="left">
+        <h1>Filter</h1>
+        <div id="filter">
+            <div>
+                <h3>Search By NAME/PIN/UDISE Code:</h3>
+                <input type="text" id="name" placeholder="NAME or PIN or UDISE Code">
+                <h3>School-Type:</h3>
+                <div id="filter-div">
+                    <input type="checkbox" name="govt" id="govt">
+                    <label for="govt" id="govtLable" class="filter-item">Boys Only</label>
+                    <input type="checkbox" name="private" id="private">
+                    <label for="private" id="privateLable" class="filter-item">Girls Only</label>
+                    <input type="checkbox" name="pulic" id="pulic">
+                    <label for="pulic" id="pulicLable" class="filter-item">Co-Ed</label>
+                </div>
+            </div>
+            <label for="CSWN" style="cursor: pointer;">
+                <h3>Special School for CSWN</h3>
+            </label>
+            <input type="checkbox" id="CSWN">
+            <h3>Year Of Establishment:</h3> <span id="rangevalue">1950-2022</span>
+            <input type="range" id="yearRange">
+            <h3>Location:</h3>
+            <select name="locations" id="locations">
+                <option value="none" selected>Choose city...</option>
+            </select>
+        </div>
+        <h1>Schools List <a href="./filter.html">See Full List -></a></h1>
+
+        <ul id="list">
+        </ul>
+    </div>
+    <div id="map"></div>
+
+    <!-- login ka sara system -->
+    <style>
+        #login {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 1rem;
+            font-size: large;
+            cursor: pointer;
+            z-index: 50;
+            background-color: rgb(0, 23, 156);
+            color: rgb(236, 251, 255);
+        }
+
+        #loginform {
+            top: 20%;
+            left: 40%;
+            border-radius: 20px;
+            background-color: rgb(236, 251, 255);
+            background-color: rgb(255, 233, 250);
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            animation: appear 1s ease-in-out forwards;
+        }
+
+        #loginform input,
+        #loginform button {
+            min-width: 80%;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(200px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0);
+            }
+        }
+
+        #box {
+            display: none;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            z-index: 99;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.418);
+        }
+
+        #loginform h1 {
+            padding: 1rem;
+            width: 100%;
+            text-align: center;
+            background-color: rgb(0, 23, 156);
+            color: rgb(236, 251, 255);
+        }
+
+        #loginform i,
+        #loginform input,
+        button {
+            margin: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 20px;
+        }
+    </style>
+    <i id="login" class="fas fa-user-lock"></i>
+    <div id="box">
+        <form id="loginform" action="login" method="post">
+            <h1>Login</h1>
+            <input type="email" id="email" name="email" placeholder="Your Registered Email" required>
+            <input type="password" id="pass" name="password" placeholder="password" required>
+            <button type="submit" id="submit">Submit</button>
+            <script>
+                document.getElementById('login').addEventListener('click', () => {
+                    form.style.display = 'flex'
+                    box.style.display = 'flex'
+                })
+                var form = document.getElementById('loginform');
+                var box = document.getElementById('box')
+                box.addEventListener('click', function (event) {
+                    var isClickInsideElement = form.contains(event.target);
+                    if (!isClickInsideElement) {
+                        if (form.style.display == 'flex') {
+                            form.style.display = 'none'
+                            box.style.display = 'none'
+                        }
+                    }
+                });
+            </script>
+            <i><b>don't have an account?</b> <a href="./register.html"> create an account</a></i>
+        </form>
+    </div>
+    <!-- login ka sara system -->
+</body>
+<script src="./index.js"></script>
+
+</html>
