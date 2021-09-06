@@ -316,6 +316,20 @@ option:hover {
   width: 75%;
   z-index: 10;
 }
+@media only screen and (max-width: 1530px) {
+  #left{
+    width: 40%;
+  }
+  #details{
+    width: 40%;
+  }
+  #map{
+    width: 60%;
+  }
+  /* .extra{
+    grid-template-columns: repeat(2, 1fr);
+  } */
+}
 @media only screen and (max-width: 780px) {
   #filter,
   #left h1:first-child {
@@ -334,5 +348,11 @@ option:hover {
   #left {
     width: 100%;
     height: 50vh;
+  }
+  #details {
+    height: 50%;
+    width: 100%;
+    top: auto;
+    bottom: 0%;
   }
 }
