@@ -44,10 +44,20 @@
                 <option value="none" selected>Choose city...</option>
             </select>
         </div>
-        <h1>Schools List <a href="./filter.html">See Full List -></a></h1>
+        <h1>Schools List</h1>
 
         <ul id="list">
         </ul>
+    </div>
+    <div id="details">
+        <i class="fas fa-times" id="close"></i>
+        <div id="schooldetails">
+        </div>
+        <script>
+            document.getElementById('close').addEventListener('click', () => {
+                document.getElementById('details').style.display = 'none'
+            })
+        </script>
     </div>
     <div id="map"></div>
 

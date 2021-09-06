@@ -100,7 +100,7 @@
     .catch((e) => {
       console.log(e);
     });
-    x.forEach(e=>console.log(e))
+  // x.forEach(e=>console.log(e['Availability of Handrails']))
   // console.log(x);
 
   //------------------------------------------- next ------------------------------------------
@@ -111,7 +111,6 @@
   const tileLayer = L.tileLayer(tileUrl, {
     attribution,
     minZoom: 5,
-    // maxZoom: 20,
     noWrap: true,
   });
   tileLayer.addTo(myMap);
@@ -213,11 +212,310 @@
       }
       li.appendChild(listItem);
       ul.appendChild(li);
+      listItem.addEventListener("click", () => {
+        generatepop(school);
+      });
     }
     booked.forEach((school) => appendList(school, true));
     nbooked.forEach((school) => appendList(school, false));
   }
+  //------------------------------------onclick-------------------------
+  function generatepop(school) {
+    let box = document.getElementById("details");
+    let maindiv = document.getElementById("schooldetails");
+    maindiv.classList.add("list-item");
+    maindiv.innerHTML = "";
+    box.style.display = "block";
+    const up = document.createElement("div");
+    up.classList.add("up");
 
+    const year = document.createElement("h4");
+    year.innerHTML = school["Year of Establishment"];
+
+    const name = document.createElement("h2");
+    name.innerHTML = school["School Name"];
+    const udise = document.createElement("h4");
+    udise.innerHTML = "UDISE Code - " + school["UDISE Code"];
+
+    const locations = document.createElement("p");
+    const icon = document.createElement("i");
+    const data = document.createElement("span");
+    data.innerHTML = school.Cluster;
+    icon.classList.add("fas");
+    icon.classList.add("fa-map-marker-alt");
+    locations.appendChild(icon);
+    locations.appendChild(data);
+
+    const down = document.createElement("div");
+    down.classList.add("down");
+
+    const list1 = document.createElement("ul");
+    const list2 = document.createElement("ul");
+    const list3 = document.createElement("ul");
+    const list4 = document.createElement("ul");
+
+    const classes = document.createElement("li");
+    const c = document.createElement("li");
+    c.innerHTML = "Classrooms";
+    list1.appendChild(c);
+    classes.innerHTML = school["Total Class Rooms"];
+    list1.appendChild(classes);
+
+    const teachers = document.createElement("li");
+    const t = document.createElement("li");
+    t.innerHTML = "Teachers";
+    list2.appendChild(t);
+    teachers.innerHTML = school.Teachers.Total;
+    list2.appendChild(teachers);
+
+    const type = document.createElement("li");
+    const ty = document.createElement("li");
+    ty.innerHTML = "Type";
+    list3.appendChild(ty);
+    type.innerHTML = school["School Type"].substr(2);
+    list3.appendChild(type);
+
+    const building = document.createElement("li");
+    const bu = document.createElement("li");
+    bu.innerHTML = "Building Status";
+    list4.appendChild(bu);
+    building.innerHTML = school["Building Status"].substr(2);
+    list4.appendChild(building);
+
+    const extra = document.createElement("fieldset");
+    extra.classList.add("extra");
+    //----------------------------------------------------------------
+    const toilets = document.createElement("p");
+    const thead = document.createElement("div");
+    thead.innerText = "Toilets";
+
+    const boy = document.createElement("span");
+    const bd = document.createElement("b");
+    const bi = document.createElement("i");
+    bd.innerText = school.Toilets.Total.Boys;
+    bi.classList.add("fas");
+    bi.classList.add("fa-male");
+    boy.appendChild(bi);
+    boy.appendChild(bd);
+
+    const girl = document.createElement("span");
+    const gd = document.createElement("b");
+    const gi = document.createElement("i");
+    gd.innerText = school.Toilets.Total.Girls;
+    gi.classList.add("fas");
+    gi.classList.add("fa-female");
+    girl.appendChild(gi);
+    girl.appendChild(gd);
+
+    const CSWN = document.createElement("span");
+    const cd = document.createElement("b");
+    const ci = document.createElement("i");
+    cd.innerText =
+      parseInt(school.Toilets["Func. CWSN Friendly"].Boys) +
+      parseInt(school.Toilets["Func. CWSN Friendly"].Girls);
+    ci.classList.add("fas");
+    ci.classList.add("fa-wheelchair");
+    CSWN.appendChild(ci);
+    CSWN.appendChild(cd);
+    toilets.appendChild(thead);
+    let ek = document.createElement("span");
+    ek.appendChild(boy);
+    ek.appendChild(girl);
+    ek.appendChild(CSWN);
+    toilets.appendChild(ek);
+    extra.appendChild(toilets);
+    //------------------------------------------------------------------
+    let desktop = document.createElement("p");
+    let dhead = document.createElement("div");
+    dhead.innerHTML = "Desktops";
+    let dd = document.createElement("b");
+    let di = document.createElement("i");
+    dd.innerText = school.Desktop;
+    let span = document.createElement("span");
+    di.classList.add("fas");
+    di.classList.add("fa-laptop");
+    desktop.appendChild(dhead);
+    span.appendChild(di);
+    span.appendChild(dd);
+    desktop.appendChild(span);
+    extra.appendChild(desktop);
+    //---------------------------------------------------------------
+    desktop = document.createElement("p");
+    dhead = document.createElement("div");
+    dhead.innerHTML = "DigiBoard";
+    dd = document.createElement("b");
+    di = document.createElement("i");
+    dd.innerText = school.DigiBoard;
+    span = document.createElement("span");
+    di.classList.add("fas");
+    di.classList.add("fa-digital-tachograph");
+    desktop.appendChild(dhead);
+    span.appendChild(di);
+    span.appendChild(dd);
+    desktop.appendChild(span);
+    extra.appendChild(desktop);
+    //---------------------------------------------------------------
+    desktop = document.createElement("p");
+    dhead = document.createElement("div");
+    dhead.innerHTML = "Furnitures";
+    dd = document.createElement("b");
+    di = document.createElement("i");
+    dd.innerText = school["Furniture Availability"];
+    span = document.createElement("span");
+    di.classList.add("fas");
+    di.classList.add("fa-chair");
+    desktop.appendChild(dhead);
+    span.appendChild(di);
+    span.appendChild(dd);
+    desktop.appendChild(span);
+    extra.appendChild(desktop);
+    //---------------------------------------------------------------
+    const ict = document.createElement("p");
+    if (school["ICT Lab"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-laptop-code");
+      span.innerText = "ICT Lab";
+      ict.appendChild(i);
+      ict.appendChild(span);
+      extra.appendChild(ict);
+    }
+    const Internet = document.createElement("p");
+    if (school["Internet"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-wifi");
+      span.innerText = "Internet";
+      Internet.appendChild(i);
+      Internet.appendChild(span);
+      extra.appendChild(Internet);
+    }
+    const drinkingwater = document.createElement("p");
+    if (school["Drinking Water Available"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-faucet");
+      i.style.color = "blue";
+      span.innerText = "Drinking Water";
+      drinkingwater.appendChild(i);
+      drinkingwater.appendChild(span);
+      extra.appendChild(drinkingwater);
+    }
+    const playground = document.createElement("p");
+    if (school["Playground Available"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-child");
+      i.style.color = "green";
+      span.innerText = "Playground";
+      playground.appendChild(i);
+      playground.appendChild(span);
+      extra.appendChild(playground);
+    }
+    const solarpanel = document.createElement("p");
+    if (school["Solar Panel"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-solar-panel");
+      i.style.color = "orange";
+      span.innerText = "Solar Panel";
+      solarpanel.appendChild(i);
+      solarpanel.appendChild(span);
+      extra.appendChild(solarpanel);
+    }
+    const library = document.createElement("p");
+    if (school["Library Availability"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-book-reader");
+      i.style.color = "brown";
+      span.innerText = "library";
+      library.appendChild(i);
+      library.appendChild(span);
+      extra.appendChild(library);
+    }
+    const handwash = document.createElement("p");
+    if (school["Handwash Facility for Meal"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-hand-holding-water");
+      i.style.color = "indigo";
+      span.innerText = "handwash";
+      handwash.appendChild(i);
+      handwash.appendChild(span);
+      extra.appendChild(handwash);
+    }
+    const Electricity = document.createElement("p");
+    if (school["Electricity Availability"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-charging-station");
+      i.style.color = "red";
+      span.innerText = "Electricity";
+      Electricity.appendChild(i);
+      Electricity.appendChild(span);
+      extra.appendChild(Electricity);
+    }
+    const DTH = document.createElement("p");
+    if (school["DTH"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-tv");
+      // i.style.color = "silver"
+      span.innerText = "DTH";
+      DTH.appendChild(i);
+      DTH.appendChild(span);
+      extra.appendChild(DTH);
+    }
+    const handrail = document.createElement("p");
+    if (school["Availability of Handrails"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.classList.add("fas");
+      i.classList.add("fa-bacon");
+      span.innerText = "Handrails";
+      handrail.appendChild(i);
+      handrail.appendChild(span);
+      extra.appendChild(handrail);
+    }
+    const ramp = document.createElement("p");
+    if (school["Availability of Ramps"] == "1-Yes") {
+      let i = document.createElement("i");
+      let span = document.createElement("span");
+      i.style.width = "20px";
+      i.style.borderBottom = "5px solid black";
+      i.style.transform = "rotate(-30deg)";
+      span.innerText = "Ramps";
+      ramp.appendChild(i);
+      ramp.appendChild(span);
+      extra.appendChild(ramp);
+    }
+
+    up.appendChild(year);
+    up.appendChild(name);
+    up.appendChild(udise);
+    up.appendChild(locations);
+    down.appendChild(list3);
+    down.appendChild(list2);
+    down.appendChild(list1);
+    down.appendChild(list4);
+    maindiv.appendChild(up);
+    maindiv.appendChild(down);
+    const l = document.createElement("legend");
+    l.innerText = "Facilities Available";
+    extra.appendChild(l);
+    maindiv.appendChild(extra);
+    console.log(school);
+  }
   function fly(school) {
     const lat = school.lat;
     const lng = school.lng;
@@ -259,15 +557,15 @@
         return school.Cluster == value;
       }
     }
-    function checkCSWN(){
-      if(document.getElementById('CSWN').checked){
-        if(school['Is Special School for CWSN?']=='1-Yes'){
-          return true
-        } else{
-          return false
+    function checkCSWN() {
+      if (document.getElementById("CSWN").checked) {
+        if (school["Is Special School for CWSN?"] == "1-Yes") {
+          return true;
+        } else {
+          return false;
         }
       }
-      return true
+      return true;
     }
     function checkType() {
       if (!govt.checked && !private.checked && !pulic.checked) {
@@ -307,7 +605,8 @@
       }
     }
     let condition =
-      checkType() && checkCSWN()&&
+      checkType() &&
+      checkCSWN() &&
       school["Year of Establishment"] <= slider.value &&
       checklocation() &&
       (checkname() || checkpin() || checkudise());
@@ -362,12 +661,12 @@
     showDataOnMap(filtered);
     generateList(filtered);
   });
-  // search cswn friendly 
-  document.getElementById('CSWN').addEventListener('click',()=>{
+  // search cswn friendly
+  document.getElementById("CSWN").addEventListener("click", () => {
     filtered = x.filter((school) => check(school));
     showDataOnMap(filtered);
     generateList(filtered);
-  })
+  });
   //filtering by type
 
   document.getElementById("filter-div").addEventListener("click", () => {
