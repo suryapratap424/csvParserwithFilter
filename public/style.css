@@ -350,6 +350,7 @@ option:hover {
     height: 50vh;
   }
   #details {
+    z-index: 999;
     height: 50%;
     width: 100%;
     top: auto;
