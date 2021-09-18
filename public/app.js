@@ -49,6 +49,7 @@
 
   var o = localStorage["clickedSchool"];
   localStorage.removeItem("clickedSchool");
+
   function generateList(list) {
     const ul = document.querySelector("#list");
     ul.innerHTML = ""; //reset
@@ -120,13 +121,14 @@
     booked.forEach((school) => appendList(school, true));
     nbooked.forEach((school) => appendList(school, false));
   }
-  //------------------------------------onclick-------------------------
+  //------------------------------------onclick--------------------------------------------
   function generatepop(school) {
     let box = document.getElementById("details");
     let maindiv = document.getElementById("schooldetails");
     maindiv.classList.add("list-item");
     maindiv.innerHTML = "";
     box.style.display = "block";
+    //--------------------------------------------------up------------------------------------------------
     const up = document.createElement("div");
     up.classList.add("up");
 
@@ -146,46 +148,30 @@
     icon.classList.add("fa-map-marker-alt");
     locations.appendChild(icon);
     locations.appendChild(data);
-
+    //---------------------------------------down---------------------------------------------
     const down = document.createElement("div");
     down.classList.add("down");
 
-    const list1 = document.createElement("ul");
-    const list2 = document.createElement("ul");
-    const list3 = document.createElement("ul");
-    const list4 = document.createElement("ul");
+    function createdownblock(text, data) {
+      const list = document.createElement("ul");
+      const value = document.createElement("li");
+      const v = document.createElement("li");
+      v.innerHTML = text;
+      list.appendChild(v);
+      value.innerHTML = data;
+      list.appendChild(value);
+      down.appendChild(list);
+    }
+    createdownblock("Classrooms", school["Total Class Rooms"]);
+    createdownblock("Teachers", school.Teachers.Total);
+    createdownblock("Type", school["School Type"].substr(2));
+    createdownblock("Building Status", school["Building Status"].substr(2));
 
-    const classes = document.createElement("li");
-    const c = document.createElement("li");
-    c.innerHTML = "Classrooms";
-    list1.appendChild(c);
-    classes.innerHTML = school["Total Class Rooms"];
-    list1.appendChild(classes);
-
-    const teachers = document.createElement("li");
-    const t = document.createElement("li");
-    t.innerHTML = "Teachers";
-    list2.appendChild(t);
-    teachers.innerHTML = school.Teachers.Total;
-    list2.appendChild(teachers);
-
-    const type = document.createElement("li");
-    const ty = document.createElement("li");
-    ty.innerHTML = "Type";
-    list3.appendChild(ty);
-    type.innerHTML = school["School Type"].substr(2);
-    list3.appendChild(type);
-
-    const building = document.createElement("li");
-    const bu = document.createElement("li");
-    bu.innerHTML = "Building Status";
-    list4.appendChild(bu);
-    building.innerHTML = school["Building Status"].substr(2);
-    list4.appendChild(building);
+    //---------------------------------------extra--------------------------------------------
 
     const extra = document.createElement("fieldset");
     extra.classList.add("extra");
-    //----------------------------------------------------------------
+
     const toilets = document.createElement("p");
     const thead = document.createElement("div");
     thead.innerText = "Toilets";
@@ -226,168 +212,72 @@
     toilets.appendChild(ek);
     extra.appendChild(toilets);
     //------------------------------------------------------------------
-    let desktop = document.createElement("p");
-    let dhead = document.createElement("div");
-    dhead.innerHTML = "Desktops";
-    let dd = document.createElement("b");
-    let di = document.createElement("i");
-    dd.innerText = school.Desktop;
-    let span = document.createElement("span");
-    di.classList.add("fas");
-    di.classList.add("fa-laptop");
-    desktop.appendChild(dhead);
-    span.appendChild(di);
-    span.appendChild(dd);
-    desktop.appendChild(span);
-    extra.appendChild(desktop);
+    function createblockwithvalue(text, icon, value) {
+      let block = document.createElement("p");
+      let dhead = document.createElement("div");
+      dhead.innerHTML = text;
+      let dd = document.createElement("b");
+      let di = document.createElement("i");
+      dd.innerText = value;
+      let span = document.createElement("span");
+      di.classList.add("fas");
+      di.classList.add("fa-" + icon);
+      block.appendChild(dhead);
+      span.appendChild(di);
+      span.appendChild(dd);
+      block.appendChild(span);
+      extra.appendChild(block);
+    }
+    createblockwithvalue("Desktops", "laptop", school.Desktop);
+    createblockwithvalue("DigiBoard", "digital-tachograph", school.DigiBoard);
+    createblockwithvalue(
+      "Furnitures",
+      "chair",
+      school["Furniture Availability"]
+    );
+
     //---------------------------------------------------------------
-    desktop = document.createElement("p");
-    dhead = document.createElement("div");
-    dhead.innerHTML = "DigiBoard";
-    dd = document.createElement("b");
-    di = document.createElement("i");
-    dd.innerText = school.DigiBoard;
-    span = document.createElement("span");
-    di.classList.add("fas");
-    di.classList.add("fa-digital-tachograph");
-    desktop.appendChild(dhead);
-    span.appendChild(di);
-    span.appendChild(dd);
-    desktop.appendChild(span);
-    extra.appendChild(desktop);
-    //---------------------------------------------------------------
-    desktop = document.createElement("p");
-    dhead = document.createElement("div");
-    dhead.innerHTML = "Furnitures";
-    dd = document.createElement("b");
-    di = document.createElement("i");
-    dd.innerText = school["Furniture Availability"];
-    span = document.createElement("span");
-    di.classList.add("fas");
-    di.classList.add("fa-chair");
-    desktop.appendChild(dhead);
-    span.appendChild(di);
-    span.appendChild(dd);
-    desktop.appendChild(span);
-    extra.appendChild(desktop);
-    //---------------------------------------------------------------
-    const ict = document.createElement("p");
-    if (school["ICT Lab"] == "1-Yes") {
+    function createblock(text, icon, color) {
+      const block = document.createElement("p");
       let i = document.createElement("i");
       let span = document.createElement("span");
       i.classList.add("fas");
-      i.classList.add("fa-laptop-code");
-      span.innerText = "ICT Lab";
-      ict.appendChild(i);
-      ict.appendChild(span);
-      extra.appendChild(ict);
+      i.classList.add("fa-" + icon);
+      i.style.color = color;
+      span.innerText = text;
+      block.appendChild(i);
+      block.appendChild(span);
+      extra.appendChild(block);
     }
-    const Internet = document.createElement("p");
-    if (school["Internet"] == "1-Yes") {
-      let i = document.createElement("i");
-      let span = document.createElement("span");
-      i.classList.add("fas");
-      i.classList.add("fa-wifi");
-      span.innerText = "Internet";
-      Internet.appendChild(i);
-      Internet.appendChild(span);
-      extra.appendChild(Internet);
-    }
-    const drinkingwater = document.createElement("p");
-    if (school["Drinking Water Available"] == "1-Yes") {
-      let i = document.createElement("i");
-      let span = document.createElement("span");
-      i.classList.add("fas");
-      i.classList.add("fa-faucet");
-      i.style.color = "blue";
-      span.innerText = "Drinking Water";
-      drinkingwater.appendChild(i);
-      drinkingwater.appendChild(span);
-      extra.appendChild(drinkingwater);
-    }
-    const playground = document.createElement("p");
-    if (school["Playground Available"] == "1-Yes") {
-      let i = document.createElement("i");
-      let span = document.createElement("span");
-      i.classList.add("fas");
-      i.classList.add("fa-child");
-      i.style.color = "green";
-      span.innerText = "Playground";
-      playground.appendChild(i);
-      playground.appendChild(span);
-      extra.appendChild(playground);
-    }
-    const solarpanel = document.createElement("p");
-    if (school["Solar Panel"] == "1-Yes") {
-      let i = document.createElement("i");
-      let span = document.createElement("span");
-      i.classList.add("fas");
-      i.classList.add("fa-solar-panel");
-      i.style.color = "orange";
-      span.innerText = "Solar Panel";
-      solarpanel.appendChild(i);
-      solarpanel.appendChild(span);
-      extra.appendChild(solarpanel);
-    }
-    const library = document.createElement("p");
-    if (school["Library Availability"] == "1-Yes") {
-      let i = document.createElement("i");
-      let span = document.createElement("span");
-      i.classList.add("fas");
-      i.classList.add("fa-book-reader");
-      i.style.color = "brown";
-      span.innerText = "library";
-      library.appendChild(i);
-      library.appendChild(span);
-      extra.appendChild(library);
-    }
-    const handwash = document.createElement("p");
-    if (school["Handwash Facility for Meal"] == "1-Yes") {
-      let i = document.createElement("i");
-      let span = document.createElement("span");
-      i.classList.add("fas");
-      i.classList.add("fa-hand-holding-water");
-      i.style.color = "indigo";
-      span.innerText = "handwash";
-      handwash.appendChild(i);
-      handwash.appendChild(span);
-      extra.appendChild(handwash);
-    }
-    const Electricity = document.createElement("p");
-    if (school["Electricity Availability"] == "1-Yes") {
-      let i = document.createElement("i");
-      let span = document.createElement("span");
-      i.classList.add("fas");
-      i.classList.add("fa-charging-station");
-      i.style.color = "red";
-      span.innerText = "Electricity";
-      Electricity.appendChild(i);
-      Electricity.appendChild(span);
-      extra.appendChild(Electricity);
-    }
-    const DTH = document.createElement("p");
-    if (school["DTH"] == "1-Yes") {
-      let i = document.createElement("i");
-      let span = document.createElement("span");
-      i.classList.add("fas");
-      i.classList.add("fa-tv");
-      // i.style.color = "silver"
-      span.innerText = "DTH";
-      DTH.appendChild(i);
-      DTH.appendChild(span);
-      extra.appendChild(DTH);
-    }
-    const handrail = document.createElement("p");
-    if (school["Availability of Handrails"] == "1-Yes") {
-      let i = document.createElement("i");
-      let span = document.createElement("span");
-      i.classList.add("fas");
-      i.classList.add("fa-bacon");
-      span.innerText = "Handrails";
-      handrail.appendChild(i);
-      handrail.appendChild(span);
-      extra.appendChild(handrail);
-    }
+    //condition && function ==> if condition==true => function runs
+    
+    school["ICT Lab"] == "1-Yes" && createblock("ICT Lab", "laptop-code");
+
+    school["Internet"] == "1-Yes" && createblock("Internet", "wifi");
+
+    school["Drinking Water Available"] == "1-Yes" &&
+      createblock("Drinking Water", "faucet", "blue");
+
+    school["Playground Available"] == "1-Yes" &&
+      createblock("Playground", "child", "green");
+
+    school["Solar Panel"] == "1-Yes" &&
+      createblock("Solar Panel", "solar-panel", "orange");
+
+    school["Library Availability"] == "1-Yes" &&
+      createblock("Library", "book-reader", "brown");
+
+    school["Handwash Facility for Meal"] == "1-Yes" &&
+      createblock("Handwash", "hand-holding-water", "indigo");
+
+    school["Electricity Availability"] == "1-Yes" &&
+      createblock("Electricity", "charging-station", "red");
+
+    school["DTH"] == "1-Yes" && createblock("DTH", "tv");
+
+    school["Availability of Handrails"] == "1-Yes" &&
+      createblock("Handrails", "bacon");
+
     const ramp = document.createElement("p");
     if (school["Availability of Ramps"] == "1-Yes") {
       let i = document.createElement("i");
@@ -405,10 +295,7 @@
     up.appendChild(name);
     up.appendChild(udise);
     up.appendChild(locations);
-    down.appendChild(list3);
-    down.appendChild(list2);
-    down.appendChild(list1);
-    down.appendChild(list4);
+
     maindiv.appendChild(up);
     maindiv.appendChild(down);
     const l = document.createElement("legend");
@@ -417,6 +304,7 @@
     maindiv.appendChild(extra);
     console.log(school);
   }
+  //---------------------------------------genpop k bahar------------------------------------------------
   function fly(school) {
     const lat = school.lat;
     const lng = school.lng;
@@ -431,7 +319,7 @@
     }, 2000);
   }
 
-  // handling layers on map
+  //-----------------------------------------handling layers on map---------------------------------------------
   var layer;
   function showDataOnMap(arr) {
     let temp = new Array();
@@ -447,7 +335,7 @@
     }
     layer = L.layerGroup(temp).addTo(myMap);
   }
-  //checking schools on based of filters
+  //--------------------------------------checking schools on based of filters---------------------------------
 
   function check(school) {
     function checklocation() {
@@ -525,6 +413,7 @@
       return true;
     }
   }
+  //-----------------------------------------------------------------------------------------
   var filtered = x;
   showDataOnMap(filtered);
   generateList(filtered);
@@ -543,7 +432,7 @@
 
   setSliderBackground();
 
-  //filtering by establishment year
+  //--------------------------------filtering by establishment year--------------------------
 
   slider.oninput = function () {
     filtered = x.filter((school) => check(school));
@@ -554,7 +443,7 @@
     generateList(filtered);
   };
 
-  // search by name pin udise
+  // -------------------------------search by name pin udise--------------------------------------
 
   var pin = document.getElementById("name");
   pin.addEventListener("input", () => {
@@ -562,13 +451,13 @@
     showDataOnMap(filtered);
     generateList(filtered);
   });
-  // search cswn friendly
+  // ---------------------------------search cswn friendly-----------------------------------------
   document.getElementById("CSWN").addEventListener("click", () => {
     filtered = x.filter((school) => check(school));
     showDataOnMap(filtered);
     generateList(filtered);
   });
-  //filtering by type
+  //-------------------------------------filtering by type----------------------------------------
 
   document.getElementById("filter-div").addEventListener("click", () => {
     govt = document.getElementById("govt");
@@ -583,7 +472,7 @@
     showDataOnMap(filtered);
     generateList(filtered);
   });
-
+  //------------------------------------filtering by location---------------------------------------
   var options = new Set();
   x.forEach((school) => options.add(school.Cluster));
   var optList = document.getElementById("locations");
