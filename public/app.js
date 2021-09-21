@@ -1,7 +1,7 @@
 async function getdata(){
-  let kya = await fetch("data")
+  let kya = await fetch("https://csvparserwithfilter.herokuapp.com/data")
   .then((response) => response.json())
-  .catch((e) => console.log(e));
+  .catch((e) => alert(e));
   return kya
 }
 const myMap = L.map("map").setView([28.5915128, 77.2192949], 20);
