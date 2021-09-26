@@ -25,10 +25,22 @@ function getcsvarray(data){
     }
     return dataarr
 }
-function appendtocsv(gathete){
-    let db = fs.readFileSync('./sampledata.csv',"utf-8")
-    db += '\n'+gathete
-    fs.writeFileSync('./sampledata.csv',db)
-    // console.log(db+'\n'+gathete)
+function setEmpty(input) {
+  let keys = Object.keys(input);
+
+  for (let key of keys) {
+    if (typeof input[key] != "object") {
+      input[key] = "N/A";
+    } else {
+      setEmpty(input[key]);
+    }
+  }
+  return input;
 }
-module.exports = {getcsvarray,appendtocsv}
+function appendtocsv(str){
+    let db = fs.readFileSync('./sampledata.csv',"utf-8")
+    db += '\n'+str
+    fs.writeFileSync('./sampledata.csv',db)
+    return db
+}
+module.exports = {getcsvarray,appendtocsv,setEmpty}

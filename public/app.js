@@ -1,30 +1,30 @@
-async function getdata(){
-  let kya = await fetch("https://csvparserwithfilter.herokuapp.com/data")
-  .then((response) => response.json())
-  .catch((e) => alert(e));
-  return kya
-}
-const myMap = L.map("map").setView([28.5915128, 77.2192949], 20);
-const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-const attribution =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
-const tileLayer = L.tileLayer(tileUrl, {
-  attribution,
-  minZoom: 5,
-  noWrap: true,
-});
-tileLayer.addTo(myMap);
-
-var southWest = L.latLng(-89.98155760646617, -180),
-  northEast = L.latLng(89.99346179538875, 180);
-var bounds = L.latLngBounds(southWest, northEast);
-
-myMap.setMaxBounds(bounds);
-
 (async function () {
-  var x = await getdata()
+  var x =await fetch("data")
+  .then((response) => response.json())
+  .catch((e) => {
+    ul.innerHTML=`Something Went Wrong<button style="cursor:pointer" onClick="window.location.reload();">Refresh Page</button>`;
+  });
   // x.forEach(e=>console.log(e['Availability of Handrails']))
-  // console.log(x);
+  console.log(x);
+  
+  const ul = document.querySelector("#list")
+  ul.innerHTML='<h2>Loading...</h2>'
+  const myMap = L.map("map").setView([28.5915128, 77.2192949], 20);
+  const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  const attribution =
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+  const tileLayer = L.tileLayer(tileUrl, {
+    attribution,
+    minZoom: 5,
+    noWrap: true,
+  });
+  tileLayer.addTo(myMap);
+  
+  var southWest = L.latLng(-89.98155760646617, -180),
+    northEast = L.latLng(89.99346179538875, 180);
+  var bounds = L.latLngBounds(southWest, northEast);
+  
+  myMap.setMaxBounds(bounds);
 
   function genPop(school) {
     return `

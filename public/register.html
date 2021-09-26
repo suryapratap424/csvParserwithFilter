@@ -1,4 +1,259 @@
-<h1 id="submit">
-    MAKE REQUEST
-</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regiser your school</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <style>
+        * {
+            margin: 0%;
+            padding: 0%;
+            box-sizing: border-box;
+            font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+                "Lucida Sans", Arial, sans-serif;
+        }
+        body {
+            background-color: rgb(255, 233, 250);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        label{
+            cursor: pointer;
+        }
+        .inside span:hover{
+            transition: 1s;
+           background-color: rgba(80, 205, 255, 0.527);
+        }
+        body h1 {
+            padding: 1rem;
+            width: 100%;
+            text-align: center;
+            background-color: rgb(0, 23, 156);
+            color: rgb(236, 251, 255);
+        }
+
+        form {
+            padding: 1rem;
+            background-color: rgb(236, 251, 255);
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            text-align: center;
+        }
+
+        button {
+            padding: 0.5rem;
+            margin: 0.5rem;
+            grid-column: 1/3;
+        }
+        .inside,
+        input {
+            padding: 0.5rem;
+            margin: 0.5rem;
+        }
+
+        #input {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+
+        #location {
+            margin: 1rem;
+            text-align: center;
+        }
+
+        #location h3 {
+            margin-bottom: 1rem;
+            border-bottom: 2px dotted rgb(0, 68, 87);
+        }
+
+        #map {
+            height: 60vh;
+            width: 40vw;
+        }
+        fieldset{
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+        }
+        @media only screen and (max-width: 770px) {
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            fieldset{
+                grid-template-columns: repeat(2,1fr);
+            }
+            #map {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Register Your School</h1>
+    <form id="form">
+        <div id="input">
+            <input type="number" name="udise" placeholder="UDISE Code">
+            <input type="text" name="Name" placeholder="School name">
+            <textarea class="inside" name="Cluster" placeholder="School Adress"></textarea>
+            <input type="number" name="pincode" placeholder="Pin Code">
+            <input type="number" name="year_of_establishment" placeholder="Year of Establishment">
+            <div class="inside">
+                <span>Select Type : </span>
+                <input type="radio" name="type" id="boy" value="1-Boys" required>
+                <label for="boy">Boys Only</label>
+                <input type="radio" name="type" id="girl" value="2-Girls">
+                <label for="girl">Girls Only</label>
+                <input type="radio" name="type" id="Co-Ed" value="3-Co-educational">
+                <label for="Co-Ed">Co-Ed</label>
+            </div>
+            <div class="inside">
+                <span>Select Type : </span>
+                <span>
+                    <input type="radio" name="buildingStatus" id="1" value="1-Private" required>
+                    <label for="1">Private</label>
+                </span>
+                <span>
+                    <input type="radio" name="buildingStatus" id="2" value="2-Rented">
+                    <label for="2">Rented</label>
+                </span>
+                <span>
+                    <input type="radio" name="buildingStatus" id="3" value="3-Government">
+                    <label for="3">Government</label>
+                </span>
+                <span>
+                    <input type="radio" name="buildingStatus" id="4" value="4-Government school in a rent free building">
+                    <label for="4">Government school in a rent free building</label>
+                </span>
+            </div>
+            <input type="number" name="classroom_count" placeholder="No of Classes">
+            <input type="number" name="number_of_teachers" placeholder="No of Teachers">
+            <span class="inside">
+                <label>Toilets</label>
+                <input type="number" name="Toilets.Boys" placeholder="Boys">
+                <input type="number" name="Toilets.Girls" placeholder="Girls">
+                <input type="number" name="CSWNboys" placeholder="CSWN-Boys">
+                <input type="number" name="CSWNgirls" placeholder="CSWN-Girls">
+            </span>
+            <div class="inside">
+                <span>
+                    <label for="digiboard">Digiboard</label>
+                    <input type="number" name="digiboard" id="digiboard">
+                </span>
+                <span>
+                    <label for="desktop">Desktop</label>
+                    <input type="number" name="desktop" id="desktop">
+                </span>
+                <span>
+                    <label for="furniture">Furniture</label>
+                    <input type="number" name="furniture" id="furniture">
+                </span>
+            </div>
+                <fieldset class="inside">
+                <legend>Facilities</legend>
+                <span>
+                    <input type="checkbox" name="handrail" id="handrail">
+                    <label for="handrail">Handrail</label>
+                </span>
+                <span>
+                    <input type="checkbox" name="ramp" id="ramp">
+                    <label for="ramp">Ramp</label>
+                </span>
+                <span>
+                    <input type="checkbox" name="library" id="library">
+                    <label for="library">Library</label>
+                </span>
+                <span>
+                    <input type="checkbox" name="handwash" id="handwash">
+                    <label for="handwash">Handwash</label>
+                </span>
+                <span>
+                    <input type="checkbox" name="solar" id="solar">
+                    <label for="solar">Solar Panel</label>
+                </span>
+                
+                <span>
+                    <input type="checkbox" name="playground" id="playground">
+                    <label for="playground">Playground</label>
+                </span>
+                <span>
+                    <input type="checkbox" name="internet" id="internet">
+                    <label for="internet">Internet</label>
+                </span>
+                <span>
+                    <input type="checkbox" name="electricity" id="electricity">
+                    <label for="electricity">Electricity</label>
+                </span>
+                <span>
+                    <input type="checkbox" name="ICTlab" id="ICTlab">
+                    <label for="ICTlab">ICT lab</label>
+                </span>
+                <span>
+                    <input type="checkbox" name="water" id="water">
+                    <label for="water">Drinking water</label>
+                </span>
+                <span>
+                    <input type="checkbox" name="dth" id="dth">
+                    <label for="dth">DTH</label>
+                </span>
+            </fieldset>
+        </div>
+        <div id="location">
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lng" id="lng">
+            <h3>Set Your Location</h3>
+            <div id="map"></div>
+        </div>
+        <script>
+            document.getElementById("location").addEventListener('click',()=>{
+                document.getElementById('submit').disabled=false
+            })
+
+        </script>
+        <button id="submit" type="submit" disabled>Register</button>
+    </form>
+</body>
+<script>
+    const myMap = L.map("map").setView([20, 80], 4);
+    const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+    const attribution =
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+
+    const tileLayer = L.tileLayer(tileUrl, {
+        attribution,
+        minZoom: 3,
+        maxZoom: 7,
+        noWrap: true,
+    });
+    var southWest = L.latLng(-89.98155760646617, -180),
+        northEast = L.latLng(89.99346179538875, 180);
+    var bounds = L.latLngBounds(southWest, northEast);
+
+    myMap.setMaxBounds(bounds);
+    tileLayer.addTo(myMap);
+
+    var marker
+    myMap.on('click', onMapClick);
+    marker = L.marker([0,0]).addTo(myMap);
+    function onMapClick(e) {
+        document.getElementById('lat').value = e.latlng.lat;
+        document.getElementById('lng').value = e.latlng.lng;
+        if (marker != undefined) {
+            myMap.removeLayer(marker)
+        }
+        marker = L.marker(e.latlng).addTo(myMap);
+    }
+</script>
 <script src="./data.js"></script>
+</html>
