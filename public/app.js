@@ -1,5 +1,7 @@
 (async function () {
-  var x =await fetch("data")
+  const ul = document.querySelector("#list")
+  ul.innerHTML='<h2>Loading...</h2>'
+  var x =await fetch("https://csvparserwithfilter.herokuapp.com/data")
   .then((response) => response.json())
   .catch((e) => {
     ul.innerHTML=`Something Went Wrong<button style="cursor:pointer" onClick="window.location.reload();">Refresh Page</button>`;
@@ -7,8 +9,6 @@
   // x.forEach(e=>console.log(e['Availability of Handrails']))
   console.log(x);
   
-  const ul = document.querySelector("#list")
-  ul.innerHTML='<h2>Loading...</h2>'
   const myMap = L.map("map").setView([28.5915128, 77.2192949], 20);
   const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   const attribution =

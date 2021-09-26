@@ -2,7 +2,7 @@ var form = document.getElementById("form");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  var data = await fetch("template") //getting default object to be sent
+  var data = await fetch("https://csvparserwithfilter.herokuapp.com/template") //getting default object to be sent
     .then((response) => response.json())
     .catch((e) => console.log(e));
   document.getElementById("submit").disabled = true;
@@ -46,7 +46,7 @@ form.addEventListener("submit", async (e) => {
   //--------------------------set data here-----------------------------
   // console.log(data);
   //---------------------------sending data------------------------------
-  fetch('/data', {
+  fetch('https://csvparserwithfilter.herokuapp.com/data', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
