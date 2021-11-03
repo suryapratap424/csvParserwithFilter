@@ -7,7 +7,7 @@
     ul.innerHTML=`Something Went Wrong<button style="cursor:pointer" onClick="window.location.reload();">Refresh Page</button>`;
   });
   // x.forEach(e=>console.log(e['Availability of Handrails']))
-  console.log(x);
+  // console.log(x);
   
   const myMap = L.map("map").setView([28.5915128, 77.2192949], 20);
   const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -55,6 +55,7 @@
   localStorage.removeItem("clickedSchool");
 
   function generateList(list) {
+    document.getElementById('school-count').innerHTML=list.length;
     const ul = document.querySelector("#list");
     ul.innerHTML = ""; //reset
     let booked = list.filter((e) => e.booked);
@@ -91,6 +92,7 @@
       }
       listItem.addEventListener("click", () => {
         fly(school);
+        document.getElementById('done').click()
         let x = document.getElementById("active");
         if (x != null) {
           x.id = "";
@@ -306,7 +308,7 @@
     l.innerText = "Facilities Available";
     extra.appendChild(l);
     maindiv.appendChild(extra);
-    console.log(school);
+    // console.log(school);
   }
   //---------------------------------------genpop k bahar------------------------------------------------
   function fly(school) {
@@ -348,6 +350,14 @@
         return true;
       } else {
         return school.Cluster == value;
+      }
+    }
+    function checkeducation() {
+      let value = edulist.options[edulist.selectedIndex].value;
+      if (value == "none") {
+        return true;
+      } else {
+        return school["School Category"] == value;
       }
     }
     function checkCSWN() {
@@ -401,7 +411,7 @@
       checkType() &&
       checkCSWN() &&
       school["Year of Establishment"] <= slider.value &&
-      checklocation() &&
+      checklocation() && checkeducation() &&
       (checkname() || checkpin() || checkudise());
 
     if (condition) {
@@ -431,7 +441,7 @@
     slider.min + " - " + slider.max;
   function setSliderBackground() {
     let prcnt = (100 * (slider.value - slider.min)) / (slider.max - slider.min);
-    slider.style.background = `linear-gradient(90deg,rgb(0, 23, 156) ${prcnt}%,rgb(255, 233, 250) ${prcnt}%)`;
+    slider.style.background = `linear-gradient(90deg,var(--back) ${prcnt}%,white ${prcnt}%)`;
   }
 
   setSliderBackground();
@@ -480,10 +490,21 @@
   var options = new Set();
   x.forEach((school) => options.add(school.Cluster));
   var optList = document.getElementById("locations");
-
+  // console.log(options)
   options.forEach((option) => optList.add(new Option(option, option)));
 
   optList.onchange = function () {
+    filtered = x.filter((school) => check(school));
+    showDataOnMap(filtered);
+    generateList(filtered);
+  };
+  //------------------------------------filtering by education---------------------------------------
+  var options = new Set();
+  x.forEach((school) => options.add(school["School Category"]));
+  var edulist = document.getElementById("education");
+  options.forEach((option) => edulist.add(new Option(option, option)));
+
+  edulist.onchange = function () {
     filtered = x.filter((school) => check(school));
     showDataOnMap(filtered);
     generateList(filtered);

@@ -17,38 +17,89 @@
 </head>
 
 <body>
-    <div id="left">
-        <h1>Filter</h1>
+    <div id="container">
+        <div id="search">
+            <h4>SEARCH</h4><input type="text" id="name" placeholder="NAME / PIN or UDISE Code">
+        </div>
         <div id="filter">
             <div>
-                <h3>Search By NAME/PIN/UDISE Code:</h3>
-                <input type="text" id="name" placeholder="NAME or PIN or UDISE Code">
-                <h3>School-Type:</h3>
-                <div id="filter-div">
-                    <input type="checkbox" name="govt" id="govt">
-                    <label for="govt" id="govtLable" class="filter-item">Boys Only</label>
-                    <input type="checkbox" name="private" id="private">
-                    <label for="private" id="privateLable" class="filter-item">Girls Only</label>
-                    <input type="checkbox" name="pulic" id="pulic">
-                    <label for="pulic" id="pulicLable" class="filter-item">Co-Ed</label>
+                <h3>EDUCATION LEVEL:</h3>
+                <select name="education" id="education">
+                    <option value="none" selected>Choose education type...</option>
+                </select>
+            </div>
+            <div>
+                <h3>LOCATION:</h3>
+                <select name="locations" id="locations">
+                    <option value="none" selected>Choose city...</option>
+                </select>
+            </div>
+            <div>
+                <h3>CCAs:</h3>
+                <select id="cca"></select>
+            </div>
+            <div>
+                <h3>OTHER OPTIONS:</h3>
+                <select id="other"></select>
+            </div>
+        </div>
+        <div id="listbox">
+            <p><span id="school-count">***</span> schools match your criteria</p>
+            <ul id="list">
+            </ul>
+        </div>
+        <div id="map">
+        </div>
+        <div id="bluebox">
+            <div class="cca">
+                <h1>select your interests</h1>
+                <div>
+                    <label for="CSWN" style="cursor: pointer;">
+                        <h3>Special School for CSWN<input type="checkbox" id="CSWN"></h3>
+                        
+                    </label>
                 </div>
             </div>
-            <label for="CSWN" style="cursor: pointer;">
-                <h3>Special School for CSWN</h3>
-            </label>
-            <input type="checkbox" id="CSWN">
-            <h3>Year Of Establishment:</h3> <span id="rangevalue">1950-2022</span>
-            <input type="range" id="yearRange">
-            <h3>Location:</h3>
-            <select name="locations" id="locations">
-                <option value="none" selected>Choose city...</option>
-            </select>
+            <div class="other">
+                <h1>Other options to consider</h1>
+                <div>
+                    <h3>School-Type:</h3>
+                    <div id="filter-div">
+                        <input type="checkbox" name="govt" id="govt">
+                        <label for="govt" id="govtLable" class="filter-item">Boys Only</label>
+                        <input type="checkbox" name="private" id="private">
+                        <label for="private" id="privateLable" class="filter-item">Girls Only</label>
+                        <input type="checkbox" name="pulic" id="pulic">
+                        <label for="pulic" id="pulicLable" class="filter-item">Co-Ed</label>
+                    </div>
+                    <h3>Year Of Establishment:<span id="rangevalue">1950-2022</span></h3> 
+                    <input type="range" id="yearRange">
+                </div>
+            </div>
+            <div id="done">Done</div>
         </div>
-        <h1>Schools List</h1>
-
-        <ul id="list">
-        </ul>
-    </div>
+        <script>
+            document.getElementById('cca').addEventListener('mousedown', (e) => {
+                e.preventDefault()
+                document.getElementById('bluebox').style.display = 'flex';
+                document.getElementsByClassName('cca')[0].style.display = 'flex';
+                document.getElementsByClassName('other')[0].style.display = 'none';
+                document.getElementById('map').style.display = 'none';
+            })
+            document.getElementById('other').addEventListener('mousedown', (e) => {
+                e.preventDefault()
+                document.getElementById('bluebox').style.display = 'flex';
+                document.getElementsByClassName('other')[0].style.display = 'flex';
+                document.getElementsByClassName('cca')[0].style.display = 'none';
+                document.getElementById('map').style.display = 'none';
+            })
+            document.getElementById('done').addEventListener('click', () => {
+                document.getElementById('bluebox').style.display = 'none';
+                document.getElementsByClassName('cca')[0].style.display = 'none';
+                document.getElementsByClassName('other')[0].style.display = 'none';
+                document.getElementById('map').style.display = 'flex';
+            })
+        </script>
     <div id="details">
         <i class="fas fa-times" id="close"></i>
         <div id="schooldetails">
@@ -59,13 +110,12 @@
             })
         </script>
     </div>
-    <div id="map"></div>
-
+    </div>
     <!-- login ka sara system -->
     <style>
         #login {
             position: fixed;
-            top: 0;
+            top: 14%;
             right: 0;
             padding: 1rem;
             font-size: large;
