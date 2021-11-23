@@ -1,14 +1,14 @@
 (async function () {
-  const ul = document.querySelector("#list")
-  ul.innerHTML='<h2>Loading...</h2>'
-  var x =await fetch("https://csvparserwithfilter.herokuapp.com/data")
-  .then((response) => response.json())
-  .catch((e) => {
-    ul.innerHTML=`Something Went Wrong<button style="cursor:pointer" onClick="window.location.reload();">Refresh Page</button>`;
-  });
-  // x.forEach(e=>console.log(e['Availability of Handrails']))
+  const ul = document.querySelector("#list");
+  ul.innerHTML = "<h2>Loading...</h2>";
+  var x = await fetch("https://csvparserwithfilter.herokuapp.com/data")
+    .then((response) => response.json())
+    .catch((e) => {
+      ul.innerHTML = `Something Went Wrong<button style="cursor:pointer" onClick="window.location.reload();">Refresh Page</button>`;
+    });
+  x.forEach((e) => console.log(e["Handwash Facility for Meal"]));
   // console.log(x);
-  
+
   const myMap = L.map("map").setView([28.5915128, 77.2192949], 20);
   const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   const attribution =
@@ -19,11 +19,11 @@
     noWrap: true,
   });
   tileLayer.addTo(myMap);
-  
+
   var southWest = L.latLng(-89.98155760646617, -180),
     northEast = L.latLng(89.99346179538875, 180);
   var bounds = L.latLngBounds(southWest, northEast);
-  
+
   myMap.setMaxBounds(bounds);
 
   function genPop(school) {
@@ -51,11 +51,11 @@
     return [a, b];
   }
 
-  var o = localStorage["clickedSchool"];
-  localStorage.removeItem("clickedSchool");
+  // var o = localStorage["clickedSchool"];
+  // localStorage.removeItem("clickedSchool");
 
   function generateList(list) {
-    document.getElementById('school-count').innerHTML=list.length;
+    document.getElementById("school-count").innerHTML = list.length;
     const ul = document.querySelector("#list");
     ul.innerHTML = ""; //reset
     let booked = list.filter((e) => e.booked);
@@ -78,21 +78,21 @@
       locations.appendChild(icon);
       locations.appendChild(data);
       const p2 = document.createElement("p");
-      if (o != undefined) {
-        var v = JSON.parse(o);
-        let runned = 1;
-        if (runned) {
-          fly(v);
-          runned--;
-        }
-        if (v.name == school["School Name"]) {
-          listItem.setAttribute("id", "active");
-        }
-        o = undefined;
-      }
+      // if (o != undefined) {
+      //   var v = JSON.parse(o);
+      //   let runned = 1;
+      //   if (runned) {
+      //     fly(v);
+      //     runned--;
+      //   }
+      //   if (v.name == school["School Name"]) {
+      //     listItem.setAttribute("id", "active");
+      //   }
+      //   o = undefined;
+      // }
       listItem.addEventListener("click", () => {
         fly(school);
-        document.getElementById('done').click()
+        document.getElementById("done").click(); //calling click by default when user clicks on school wothot clicking done
         let x = document.getElementById("active");
         if (x != null) {
           x.id = "";
@@ -127,7 +127,7 @@
     booked.forEach((school) => appendList(school, true));
     nbooked.forEach((school) => appendList(school, false));
   }
-  //------------------------------------onclick--------------------------------------------
+  //------------------------------------onclick popup generated--------------------------------------------
   function generatepop(school) {
     let box = document.getElementById("details");
     let maindiv = document.getElementById("schooldetails");
@@ -256,7 +256,7 @@
       extra.appendChild(block);
     }
     //condition && function ==> if condition==true => function runs
-    
+
     school["ICT Lab"] == "1-Yes" && createblock("ICT Lab", "laptop-code");
 
     school["Internet"] == "1-Yes" && createblock("Internet", "wifi");
@@ -324,7 +324,38 @@
         .openOn(myMap);
     }, 2000);
   }
-
+  //---------------------------------making checkboxes----------------------------------------
+  var checkboxes = [
+    "Pre Primary",
+    "ICT Lab",
+    "Internet",
+    "Drinking Water Available",
+    "Playground Available",
+    "Solar Panel",
+    "Library Availability",
+    "Handwash Facility for Meal",
+    "Electricity Availability",
+    "DTH",
+    "Availability of Handrails",
+    "Availability of Ramps",
+  ];
+  checkboxes.forEach((property) => {
+    label = document.createElement("label");
+    inp = document.createElement("input");
+    div = document.createElement("div");
+    inp.setAttribute("type", "checkbox");
+    inp.setAttribute("id", property.replace(/ /g, "-"));
+    label.setAttribute("for", property.replace(/ /g, "-"));
+    label.innerHTML = property;
+    div.appendChild(inp);
+    div.appendChild(label);
+    document.getElementById("checkboxes").appendChild(div);
+    inp.addEventListener("click", () => {
+      filtered = x.filter((school) => check(school));
+      showDataOnMap(filtered);
+      generateList(filtered);
+    });
+  });
   //-----------------------------------------handling layers on map---------------------------------------------
   var layer;
   function showDataOnMap(arr) {
@@ -370,6 +401,24 @@
       }
       return true;
     }
+    function checkProps() {
+      let con = true;
+      checkboxes.forEach((checkbox) => {
+        con = con && checkthis(checkbox);
+        function checkthis(checkbox) {
+          if (document.getElementById(checkbox.replace(/ /g, "-")).checked) {
+            if (school[checkbox] == "1-Yes") {
+              console.log(school);
+              return true;
+            } else {
+              return false;
+            }
+          }
+          return true;
+        }
+      });
+      return con;
+    }
     function checkType() {
       if (!govt.checked && !private.checked && !pulic.checked) {
         return true;
@@ -411,7 +460,9 @@
       checkType() &&
       checkCSWN() &&
       school["Year of Establishment"] <= slider.value &&
-      checklocation() && checkeducation() &&
+      checkProps() &&
+      checklocation() &&
+      checkeducation() &&
       (checkname() || checkpin() || checkudise());
 
     if (condition) {
@@ -431,7 +482,24 @@
   var filtered = x;
   showDataOnMap(filtered);
   generateList(filtered);
-
+  document.getElementById("reset").addEventListener("click", () => {
+    filtered = x;
+    showDataOnMap(filtered);
+    generateList(filtered);
+    let all = document.getElementsByTagName('input')
+    console.log(all)
+    Array.from(all).forEach(inp=>{
+      inp.checked=false
+    })
+    slider.value = slider.max;
+    setSliderBackground();
+    document.getElementById("govtLable").classList.remove("active");
+    document.getElementById("privateLable").classList.remove("active");
+    document.getElementById("pulicLable").classList.remove("active");
+    pin.value='';
+    optList.value='none'
+    edulist.value='none'
+  });
   var slider = document.getElementById("yearRange");
   let arrrr = x.map((e) => e["Year of Establishment"]);
   slider.min = arrrr.reduce((a, b) => (a < b ? a : b));
@@ -510,3 +578,6 @@
     generateList(filtered);
   };
 })();
+function newFunction(generateList, filtered) {
+  generateList(filtered);
+}

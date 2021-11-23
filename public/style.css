@@ -271,6 +271,21 @@
   padding: 1rem;
   border: 1px solid white;
   border-radius: 5px;
+  overflow: auto;
+}
+#checkboxes{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+#checkboxes *{
+  padding: 2px;
+}
+#checkboxes label{
+  cursor: pointer;
+}
+#reset{
+  cursor: pointer;
+  float: right;
 }
 #done{
   cursor: pointer;
@@ -382,6 +397,11 @@
 @media only screen and (max-width: 1530px) {
   .extra{
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media only screen and (max-width: 940px){
+  #checkboxes{
+    grid-template-columns: 1fr;
   }
 }
 @media only screen and (max-width: 780px) {
