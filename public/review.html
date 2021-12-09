@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write a Review</title>
+    <style>
+        .star {
+            display: inline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1 id="hh">Loading..</h1>
+        <select name="schools" id="schools">
+            <option value="none" selected>Choose School...</option>
+        </select>
+        <div id="star">
+            <h2 class="star" id="1">☆</h2>
+            <h2 class="star" id="2">☆</h2>
+            <h2 class="star" id="3">☆</h2>
+            <h2 class="star" id="4">☆</h2>
+            <h2 class="star" id="5">☆</h2>
+        </div>
+        <textarea id="response" cols="30" rows="10" placeholder="Write a Review ....."></textarea>
+        <input type="button" value="Submit" onclick="submit()">
+    </div>
+    <script>
+        var fill = '★'
+        var empty = '☆'
+        var clicked = null
+        document.getElementById('star').addEventListener("mouseover", (e) => {
+            arr = document.getElementsByClassName('star')
+            Array.from(arr).forEach(star => {
+                if (e.target.id != 'star')
+                    if (e.target.id >= star.id)
+                        star.innerHTML = fill
+            })
+        })
+        document.getElementById('star').addEventListener("click", (e) => {
+            arr = document.getElementsByClassName('star')
+            Array.from(arr).forEach(star => {
+                if (e.target.id != 'star')
+                    clicked = e.target.id
+            })
+        })
+        document.getElementById('star').addEventListener("mouseout", () => {
+            arr = document.getElementsByClassName('star')
+            Array.from(arr).forEach(star => {
+                if (clicked < star.id)
+                    star.innerHTML = empty
+                console.log(clicked)
+            })
+        })
+        var optList = document.getElementById("schools");
+        fetch("https://csvparserwithfilter.herokuapp.com/data")
+            .then((response) => response.json())
+            .then(x => {
+                arrrr = []
+                x.forEach(school=>{
+                    arrrr.push({
+                        name: school['School Name'],
+                        stars: '5',
+                        message: 'good'
+                    })
+                })
+                console.log(arrrr)
+                document.getElementById('hh').innerHTML = 'Write a Review'
+                var options = new Set();
+                x.forEach((school) => options.add(school['School Name']));
+                console.log(options)
+                options.forEach((option) => optList.add(new Option(option, option)));
+            })
+            .catch((e) => console.log(e));
+        function submit() {
+            data ={
+                name:optList.value,
+                stars:clicked,
+                message: document.getElementById('response').value
+            }
+            console.log(data)
+            fetch('https://csvparserwithfilter.herokuapp.com/review', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.text())
+                .then(data => {
+                    if (data == "sucsess") {
+                        alert('review submitted')
+                        location.href = '/'
+                    } else {
+                        alert(data)
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

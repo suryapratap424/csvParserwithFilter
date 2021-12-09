@@ -8,7 +8,12 @@
     });
   x.forEach((e) => console.log(e["Handwash Facility for Meal"]));
   // console.log(x);
-
+  var rv = await fetch("https://csvparserwithfilter.herokuapp.com/review")
+    .then((response) => response.json())
+    .catch((e) => {
+      ul.innerHTML = `Something Went Wrong<button style="cursor:pointer" onClick="window.location.reload();">Refresh Page</button>`;
+    });
+  console.log(rv);
   const myMap = L.map("map").setView([28.5915128, 77.2192949], 20);
   const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   const attribution =
@@ -71,6 +76,14 @@
       const locations = document.createElement("p");
       const icon = document.createElement("i");
       const data = document.createElement("span");
+      const star = document.createElement("span");
+      star.id = "star";
+      re = rv.filter((s) => s["name"] == school["School Name"]);
+      nu = re.map((r) => r.stars);
+      nnn = nu.reduce(function (avg, value, _, { length }) {
+        return avg + value / length;
+      }, 0);
+      star.innerHTML = nnn.toFixed(1) + '★'
       data.style.display = "inline";
       data.innerHTML = school.Cluster;
       icon.classList.add("fas");
@@ -109,6 +122,7 @@
       div1.appendChild(h3);
       div1.appendChild(locations);
       div1.appendChild(p2);
+      listItem.appendChild(star);
       listItem.appendChild(div1);
       listItem.appendChild(div2);
       if (booked) {
@@ -486,19 +500,19 @@
     filtered = x;
     showDataOnMap(filtered);
     generateList(filtered);
-    let all = document.getElementsByTagName('input')
-    console.log(all)
-    Array.from(all).forEach(inp=>{
-      inp.checked=false
-    })
+    let all = document.getElementsByTagName("input");
+    console.log(all);
+    Array.from(all).forEach((inp) => {
+      inp.checked = false;
+    });
     slider.value = slider.max;
     setSliderBackground();
     document.getElementById("govtLable").classList.remove("active");
     document.getElementById("privateLable").classList.remove("active");
     document.getElementById("pulicLable").classList.remove("active");
-    pin.value='';
-    optList.value='none'
-    edulist.value='none'
+    pin.value = "";
+    optList.value = "none";
+    edulist.value = "none";
   });
   var slider = document.getElementById("yearRange");
   let arrrr = x.map((e) => e["Year of Establishment"]);
