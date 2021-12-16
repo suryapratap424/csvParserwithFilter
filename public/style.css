@@ -106,9 +106,9 @@
 .list-item div * {
   padding: 4px;
 }
-.list-item div:last-child {
+/* .list-item div:last-child {
   text-align: right;
-}
+} */
 .list-item:hover {
   animation: hover 200ms ease-in-out forwards;
   cursor: pointer;
@@ -203,7 +203,7 @@
 .filter-item {
   cursor: pointer;
   padding: 8px;
-  border: 2px solid var(--b);
+  border: 1px solid white;
   border-radius: 5px;
 }
 #name {
@@ -389,6 +389,20 @@
 .extra p span {
   padding: 3px;
   display: inline-block;
+}
+#reviewbox>div div div{
+  display: inline;
+  font-weight: bold;
+  font-size: large;
+}
+
+#reviewbox>div div p{
+  padding-left: 1rem;
+}
+#reviewbox>div>div{
+  border: 2px dotted black;
+  margin: 1rem 0;
+  padding-left: 1rem;
 }
 #map {
   height: 86vh;

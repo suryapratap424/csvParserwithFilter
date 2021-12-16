@@ -1,19 +1,20 @@
 (async function () {
   const ul = document.querySelector("#list");
   ul.innerHTML = "<h2>Loading...</h2>";
-  var x = await fetch("https://csvparserwithfilter.herokuapp.com/data")
+  var x = await fetch("data")
+  // var x = await fetch("https://csvparserwithfilter.herokuapp.com/data")
     .then((response) => response.json())
     .catch((e) => {
       ul.innerHTML = `Something Went Wrong<button style="cursor:pointer" onClick="window.location.reload();">Refresh Page</button>`;
     });
-  x.forEach((e) => console.log(e["Handwash Facility for Meal"]));
-  // console.log(x);
-  var rv = await fetch("https://csvparserwithfilter.herokuapp.com/review")
+
+  var rv = await fetch("review")
+  // var rv = await fetch("https://csvparserwithfilter.herokuapp.com/review")
     .then((response) => response.json())
     .catch((e) => {
       ul.innerHTML = `Something Went Wrong<button style="cursor:pointer" onClick="window.location.reload();">Refresh Page</button>`;
     });
-  console.log(rv);
+
   const myMap = L.map("map").setView([28.5915128, 77.2192949], 20);
   const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   const attribution =
@@ -58,7 +59,14 @@
 
   // var o = localStorage["clickedSchool"];
   // localStorage.removeItem("clickedSchool");
-
+  function getAverageStars(school){
+    re = rv.filter((s) => s["name"] == school["School Name"]);
+    nu = re.map((r) => r.stars);
+    nnn = nu.reduce(function (avg, value, _, { length }) {
+      return avg + value / length;
+    }, 0);
+    return nnn.toFixed(1)
+  }
   function generateList(list) {
     document.getElementById("school-count").innerHTML = list.length;
     const ul = document.querySelector("#list");
@@ -77,13 +85,8 @@
       const icon = document.createElement("i");
       const data = document.createElement("span");
       const star = document.createElement("span");
-      star.id = "star";
-      re = rv.filter((s) => s["name"] == school["School Name"]);
-      nu = re.map((r) => r.stars);
-      nnn = nu.reduce(function (avg, value, _, { length }) {
-        return avg + value / length;
-      }, 0);
-      star.innerHTML = nnn.toFixed(1) + '★'
+      star.classList.add("star")
+      star.innerHTML = getAverageStars(school) + '★'
       data.style.display = "inline";
       data.innerHTML = school.Cluster;
       icon.classList.add("fas");
@@ -155,6 +158,9 @@
     const year = document.createElement("h4");
     year.innerHTML = school["Year of Establishment"];
 
+    const stars = document.createElement("h4");
+    stars.innerHTML = getAverageStars(school) + '★';
+    stars.classList.add("star")
     const name = document.createElement("h2");
     name.innerHTML = school["School Name"];
     const udise = document.createElement("h4");
@@ -310,8 +316,30 @@
       ramp.appendChild(span);
       extra.appendChild(ramp);
     }
-
+    const reviews = document.createElement('div');
+    const r = document.createElement('div');
+    const h = document.createElement('h2');
+    h.innerHTML='Reviews';
+    reviews.appendChild(h);
+    reviews.id='reviewbox';
+    let sch = rv.filter((s) => s["name"] == school["School Name"]);
+    star=(s)=>{
+      var fill = '★';
+      var empty = '☆';
+      let t=''
+      for (let i = 1; i <= 5; i++) {
+        if(i<=s)
+        t+=fill
+        else
+        t+=empty
+      }
+      return t
+    }
+    sch = sch.map((r) => /*r.message==''?'':*/`<div><div>${r.persontype}</div><span>${star(r.stars)}</span><p>${r.message}</p></div>`);
+    r.innerHTML = sch.join('');
+    reviews.appendChild(r)
     up.appendChild(year);
+    up.appendChild(stars);
     up.appendChild(name);
     up.appendChild(udise);
     up.appendChild(locations);
@@ -322,7 +350,8 @@
     l.innerText = "Facilities Available";
     extra.appendChild(l);
     maindiv.appendChild(extra);
-    // console.log(school);
+    console.log(reviews)
+    maindiv.appendChild(reviews);
   }
   //---------------------------------------genpop k bahar------------------------------------------------
   function fly(school) {
@@ -422,7 +451,6 @@
         function checkthis(checkbox) {
           if (document.getElementById(checkbox.replace(/ /g, "-")).checked) {
             if (school[checkbox] == "1-Yes") {
-              console.log(school);
               return true;
             } else {
               return false;
@@ -501,7 +529,6 @@
     showDataOnMap(filtered);
     generateList(filtered);
     let all = document.getElementsByTagName("input");
-    console.log(all);
     Array.from(all).forEach((inp) => {
       inp.checked = false;
     });
@@ -572,7 +599,6 @@
   var options = new Set();
   x.forEach((school) => options.add(school.Cluster));
   var optList = document.getElementById("locations");
-  // console.log(options)
   options.forEach((option) => optList.add(new Option(option, option)));
 
   optList.onchange = function () {

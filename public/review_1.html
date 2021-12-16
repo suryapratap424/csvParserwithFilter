@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write a Review</title>
+    <style>
+        #review {
+            width: 70%;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1>What would you like to contribute?</h1>
+        <p>Everything you add helps others find a good school they'll love. Thanks!</p>
+        <div id="review">
+            <p>Add your anonymous...</p>
+            <div>
+                <input type="radio" name="reviewtype" value="school" id="school">
+                <label for="school">School Review</label>
+                <!-- <input type="radio" name="reviewtype" value="campus" id="campus">
+                <label for="campus">Campus Review</label> -->
+            </div>
+            <p>Are you a current/former employee or other</p>
+            <div>
+                <input type="radio" value="former" name="type" id="former">
+                <label for="former">Former</label>
+                <input type="radio" value="current" name="type" id="current">
+                <label for="current">Current</label>
+                <input type="radio" value="other" name="type" id="other">
+                <label for="other">Other(Teacher/Student)</label>
+            </div>
+            <h1 id="hh">Loading..</h1>
+            <select name="schools" id="schools">
+                <option value="none" selected>Choose School...</option>
+            </select>
+        </div>
+        <input type="button" value="Submit" onclick="submit()">
+    </div>
+    <script>
+        var optList = document.getElementById("schools");
+        fetch("data")
+            // fetch("https://csvparserwithfilter.herokuapp.com/data")
+            .then((response) => response.json())
+            .then(x => {
+                // arrrr = []
+                // x.forEach(school => {
+                //     arrrr.push({
+                //         name: school['School Name'],
+                //         reviewtype: "school",
+                //         type: "former",
+                //         star: "2",
+                //         persontype: "Employee",
+                //         message: "Not good Management"
+                //     })
+                // })
+                // console.log(arrrr)
+                document.getElementById('hh').innerHTML = 'School Name'
+                var options = new Set();
+                x.forEach((school) => options.add(school['School Name']));
+                // console.log(options)
+                options.forEach((option) => optList.add(new Option(option, option)));
+            })
+            .catch((e) => console.log(e));
+        function submit() {
+            if (optList.value == 'none')
+                alert('please select a school')
+            else {
+                data = {
+                    name: optList.value,
+                    reviewtype: document.querySelector('input[name="reviewtype"]:checked').value,
+                    type: document.querySelector('input[name="type"]:checked').value
+                }
+                // console.log(data)
+                localStorage.setItem("temp", JSON.stringify(data));
+                location.href = '/review_2.html'
+            }
+        }
+    </script>
+</body>
+
+</html>

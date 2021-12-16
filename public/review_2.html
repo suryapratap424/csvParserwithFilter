@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        * {
+            margin: 1rem;
+        }
+
+        h1 {
+            color: rgb(26, 158, 0);
+        }
+
+        .star {
+            display: inline;
+            cursor: pointer;
+        }
+
+        #container {
+            display: grid;
+            width: 70%;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        #schools {
+            grid-area: 1/1/2/3;
+        }
+
+        #star {
+            grid-area: 2/1/3/3;
+        }
+
+        button[type='submit'] {
+            grid-area: 5/1/6/3;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <select name="schools" id="schools">
+            <option value="none" selected>Choose School...</option>
+        </select>
+        <div id="star">
+            <h1 class="star" id="1">☆</h1>
+            <h1 class="star" id="2">☆</h1>
+            <h1 class="star" id="3">☆</h1>
+            <h1 class="star" id="4">☆</h1>
+            <h1 class="star" id="5">☆</h1>
+        </div>
+        <label for="position">You Are a?</label>
+        <select name="position" id="position"></select>
+        <label for="pros">Share Your Thoughts</label>
+        <textarea id="message" cols="10" rows="4" placeholder="Write a Review ....."></textarea>
+        <button type="submit" onclick="submit()">Submit Your Response</button>
+    </div>
+</body>
+<script>
+    var selected = JSON.parse(localStorage.getItem("temp"))
+    var optList = document.getElementById("schools");
+    fetch("data")
+        // fetch("https://csvparserwithfilter.herokuapp.com/data")
+        .then((response) => response.json())
+        .then(x => {
+            var options = new Set();
+            x.forEach((school) => options.add(school['School Name']));
+            console.log(options)
+            options.forEach((option) => optList.add(new Option(option, option)));
+        }).then(() => {
+            optList.value = selected.name
+        })
+        .catch((e) => console.log(e));
+    //-----------------------------------------------------------------------------------
+    var fill = '★'
+    var empty = '☆'
+    var clicked = null
+    document.getElementById('star').addEventListener("mouseover", (e) => {
+        arr = document.getElementsByClassName('star')
+        Array.from(arr).forEach(star => {
+            if (e.target.id != 'star')
+                if (e.target.id >= star.id)
+                    star.innerHTML = fill
+        })
+    })
+    document.getElementById('star').addEventListener("click", (e) => {
+        arr = document.getElementsByClassName('star')
+        Array.from(arr).forEach(star => {
+            if (e.target.id != 'star')
+                clicked = e.target.id
+        })
+    })
+    document.getElementById('star').addEventListener("mouseout", () => {
+        arr = document.getElementsByClassName('star')
+        Array.from(arr).forEach(star => {
+            if (clicked < star.id)
+                star.innerHTML = empty
+        })
+    })
+    // persontype = ['Teacher','Employee','Parent','Student']
+    if (selected.type == 'other') {
+        ['Parent', 'Student'].forEach(option => {
+            document.getElementById('position').add(new Option(option, option))
+        })
+    } else {
+        ['Teacher', 'Employee'].forEach(option => {
+            document.getElementById('position').add(new Option(option, option))
+        })
+    }
+    //-----------------------------------------------------------------------------------
+    function submit() {
+        if (clicked && document.getElementById('message').value == '') {
+            alert('please give stars and write a review')
+        } else {
+            selected['stars'] = clicked
+            selected['name'] = optList.value
+            selected['persontype'] = document.getElementById('position').value
+            selected['message'] = document.getElementById('message').value
+            console.log(selected)
+            fetch('review', {
+                // fetch('https://csvparserwithfilter.herokuapp.com/review', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(selected),
+            })
+                .then(response => response.text())
+                .then(data => {
+                    if (data == "sucsess") {
+                        alert('review submitted')
+                        location.href = '/'
+                    } else {
+                        alert(data)
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    }
+</script>
+
+</html>
