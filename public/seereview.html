@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>see review</title>
+    <style>
+        .reviewcard{
+            margin: 1rem;
+            background-color: cadetblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+
+    </div>
+</body>
+<script>
+    var school = localStorage['schoolname']
+    // localStorage.clear()
+    var props = ['Toilets', "ICT Lab",
+    "Internet",
+    "Drinking Water",
+    "Playground",
+    "Solar Panel",
+    "Library",
+    "Handwash",
+    "Electricity",
+    "DTH",
+    "Handrails",
+    "Ramps"]
+    rating= ['Excillent','Good','Bad','Worse','Not Sure']
+    fetch(`review/${school}`)
+        // fetch("https://csvparserwithfilter.herokuapp.com/data")
+        .then((response) => response.json())
+        .then(x => {
+            console.log(x)
+            function makecard(review){
+                str = `<div class="reviewcard">
+                            <h1>${review.type=='other'?'':review.type} ${review.persontype}</h1>
+                            <p>${review.message}</p>
+                            <span>${review.stars}</span>
+                            `
+                if(review.reviewtype=='campus'){
+                    str+= props.map(property=>`<h2>${property}</h2><p>${rating[review[property]]}</p>`).join('')
+                }
+                str+='</div>'
+                return str
+            }
+            x=x.map(review => makecard(review))
+            document.getElementById('container').innerHTML = x.join('')
+
+        })
+        .catch((e) => alert(e));
+</script>
+
+</html>

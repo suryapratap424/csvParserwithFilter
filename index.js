@@ -20,6 +20,12 @@ app.get("/data", (req, res) => {
 app.get("/template", (req, res) => {
   res.send(setEmpty(alldata()[0]));
 });
+app.get("/review/:name",(req,res)=>{
+  let rv = fs.readFileSync("./reviews.json", "utf-8");
+  rv = JSON.parse(rv)
+  rv = rv.filter(school=>school.name==req.params.name)
+  res.send(rv)
+})
 app.get("/review", (req, res)=>{
   let rv = fs.readFileSync("./reviews.json", "utf-8");
   res.send(rv)

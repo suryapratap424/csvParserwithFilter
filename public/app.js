@@ -319,6 +319,12 @@
     const reviews = document.createElement('div');
     const r = document.createElement('div');
     const h = document.createElement('h2');
+    const a = document.createElement('a')
+    a.href=`./seereview.html`
+    a.addEventListener('click',()=>{localStorage.setItem('schoolname',school["School Name"])})
+    // a.addEventListener('click',()=>alert(school["School Name"]))
+    a.innerHTML='See All Reviews'
+    reviews.appendChild(a)
     h.innerHTML='Reviews';
     reviews.appendChild(h);
     reviews.id='reviewbox';
@@ -335,9 +341,10 @@
       }
       return t
     }
-    sch = sch.map((r) => /*r.message==''?'':*/`<div><div>${r.persontype}</div><span>${star(r.stars)}</span><p>${r.message}</p></div>`);
+    sch = sch.map((r) => /*r.message==''?'':*/`<div><div>${r.type=='other'?'':r.type} ${r.persontype}</div><span>${star(r.stars)}</span><p>${r.message}</p></div>`);
     r.innerHTML = sch.join('');
     reviews.appendChild(r)
+    
     up.appendChild(year);
     up.appendChild(stars);
     up.appendChild(name);
