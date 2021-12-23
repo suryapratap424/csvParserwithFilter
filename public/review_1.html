@@ -35,7 +35,7 @@
                 <input type="radio" value="current" name="type" id="current">
                 <label for="current">Current</label>
                 <input type="radio" value="other" name="type" id="other">
-                <label for="other">Other(Teacher/Student)</label>
+                <label for="other">Other(Parent/Student)</label>
             </div>
             <h1 id="hh">Loading..</h1>
             <select name="schools" id="schools">
@@ -72,13 +72,16 @@
         function submit() {
             if (optList.value == 'none')
                 alert('please select a school')
+            else if(!document.querySelector('input[name="reviewtype"]:checked')||!document.querySelector('input[name="type"]:checked')){
+                alert('please select all required fields')
+            }
             else {
                 data = {
                     name: optList.value,
                     reviewtype: document.querySelector('input[name="reviewtype"]:checked').value,
                     type: document.querySelector('input[name="type"]:checked').value
                 }
-                // console.log(data)
+                console.log(data)
                 localStorage.setItem("temp", JSON.stringify(data));
                 location.href = '/review_2.html'
             }

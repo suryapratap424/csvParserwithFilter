@@ -106,7 +106,7 @@
         <select name="position" id="position"></select>
         <label for="message">Share Your Thoughts</label>
         <textarea id="message" cols="10" rows="4" placeholder="Write a Review ....."></textarea>
-        <div id="radiobox">
+        <div id="radiobox" style="display: none;">
             <h2>select how much you liked campus</h2>
             <div id="radios">
                 
@@ -183,6 +183,7 @@
     "Ramps"]
     if (selected.reviewtype == 'campus') {
         var box = document.getElementById('radios')
+        document.getElementById('radiobox').style.display = 'block'
         var arrr = props.map(property=>`<h2>${property}</h2><div class='row'>
             <label for="${property.replace(' ','-')}4">Excillent</label>
             <label for="${property.replace(' ','-')}3">Good</label>

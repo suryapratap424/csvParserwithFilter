@@ -24,6 +24,8 @@ app.get("/review/:name",(req,res)=>{
   let rv = fs.readFileSync("./reviews.json", "utf-8");
   rv = JSON.parse(rv)
   rv = rv.filter(school=>school.name==req.params.name)
+  if(rv.length==0)
+  rv ={'Error':'parameter should be a valid school name'}
   res.send(rv)
 })
 app.get("/review", (req, res)=>{
